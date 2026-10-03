@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Basis GTM, Modeled</title>
+<meta name="description" content="How Basis goes to market, the six data problems that motion creates, and a working GTM data model that measures them. Independent work by Syed Ahmed Basharat Ali.">
+<meta property="og:title" content="Basis GTM, Modeled">
+<meta property="og:description" content="New-logo ARR comes out 44% high when the CRM's Type field decides. A working GTM data model for selling AI agents to accounting firms.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,500..900&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --paper:#FBFCFB; --grid:#E3EDE7; --surface:#FFFFFF; --sunk:#F0F4F2; --ink:#14201B; --muted:#5C6B65; --line:#D5DFDA;
+  --tick:#167A57; --tick-soft:#E3F3EB; --exc:#C2412D; --exc-soft:#FBE8E4; --pencil:#2F5D9E;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif; --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root{color-scheme:dark;
+  --paper:#0E1412; --grid:#18221E; --surface:#141C19; --sunk:#1A2420; --ink:#E4ECE8; --muted:#97A8A1; --line:#2A3833;
+  --tick:#5FCB9C; --tick-soft:#123026; --exc:#F08872; --exc-soft:#36191393; --pencil:#8CB4EE;}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px);background-size:100% 32px}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:calc(28px + env(safe-area-inset-top,0px)) calc(80px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.05;text-wrap:balance}
+p{margin:0 0 12px;max-width:66ch}
+a{color:var(--pencil)}
+:focus-visible{outline:2px solid var(--pencil);outline-offset:3px}
+.mono{font-family:var(--mono)}
+
+/* workpaper header strip */
+.wp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1.5px solid var(--ink);background:var(--surface);font-family:var(--mono);font-size:12px}
+.wp div{padding:8px 12px;border-right:1px solid var(--line)}
+.wp div:last-child{border-right:0}
+.wp span{display:block;color:var(--muted);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+
+.hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:40px;align-items:end;margin-top:44px}
+h1{font-size:clamp(40px,6.4vw,78px);font-weight:900;font-stretch:68%;letter-spacing:-.005em;text-transform:uppercase}
+h1 em{font-style:normal;color:var(--exc)}
+.lede{font-size:20px;color:var(--muted);margin-top:18px;max-width:52ch}
+.stamp{border:2px solid var(--exc);color:var(--exc);border-radius:6px;padding:14px 16px;transform:rotate(-2deg);background:var(--surface);max-width:360px;justify-self:end}
+.stamp b{display:block;font-family:var(--display);font-size:64px;font-weight:900;font-stretch:65%;line-height:.9}
+.stamp span{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.stamp p{color:var(--ink);font-size:14px;margin:8px 0 0}
+.by{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:22px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+
+section{margin-top:72px}
+.sec-h{display:flex;align-items:baseline;gap:14px;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:20px}
+.sec-h .ref{font-family:var(--mono);font-size:13px;color:var(--pencil);font-weight:700}
+h2{font-size:clamp(28px,3.8vw,40px);font-weight:850;font-stretch:72%;text-transform:uppercase}
+
+/* the switch */
+.ledger{background:var(--surface);border:1.5px solid var(--ink)}
+.ledger-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+.ledger-top h3{font-size:20px;font-weight:800;font-stretch:80%;text-transform:uppercase}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;overflow:hidden}
+.seg button{font:600 14px var(--body);border:0;background:transparent;color:var(--ink);padding:7px 16px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.rows{display:grid}
+.row{display:grid;grid-template-columns:minmax(0,1.4fr) 130px 130px 90px;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .lab{font-weight:600}
+.row .lab small{display:block;color:var(--muted);font-weight:400;font-size:13.5px}
+.cell{font-family:var(--mono);font-size:17px;font-variant-numeric:tabular-nums;text-align:right}
+.cell.off{color:var(--muted);opacity:.45}
+.cell.on{font-weight:700}
+.delta{font-family:var(--mono);font-size:13px;text-align:right;font-weight:700}
+.delta.exc{color:var(--exc)} .delta.ok{color:var(--tick)}
+.row.head{background:var(--sunk);font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-block:8px}
+.row.head .cell,.row.head .delta{font-size:11px;font-weight:500}
+.ledger-foot{padding:10px 16px;font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
+
+/* GTM */
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1.5px solid var(--ink);background:var(--surface)}
+.fact{padding:16px;border-right:1px solid var(--line)}
+.fact:last-child{border-right:0}
+.fact b{display:block;font-family:var(--display);font-size:40px;font-weight:900;font-stretch:65%;line-height:1}
+.fact span{font-size:14px;color:var(--muted)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;margin-top:22px}
+.quote{border-left:3px solid var(--tick);padding:4px 0 4px 16px}
+.quote p{font-size:18px;margin-bottom:4px}
+.quote cite{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.motions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1.5px solid var(--ink);background:var(--surface);margin-top:8px}
+.motion{padding:16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.motion:last-child{border-right:0}
+.motion .n{font-family:var(--mono);font-size:12px;color:var(--pencil);font-weight:700}
+.motion h3{font-size:20px;font-weight:800;font-stretch:78%;text-transform:uppercase}
+.motion p{font-size:15px;color:var(--muted);margin:0}
+.motion .sig{margin-top:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink);background:var(--sunk);padding:6px 8px}
+
+/* findings */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-bottom:14px}
+.tk{font-weight:700} .tk.ok{color:var(--tick)} .tk.x{color:var(--exc)}
+.finding{display:grid;grid-template-columns:110px minmax(0,1fr) minmax(0,.9fr);gap:24px;padding:26px 0;border-bottom:1px solid var(--line)}
+.finding .wpref{font-family:var(--mono);font-weight:700;color:var(--pencil);font-size:14px}
+.finding .wpref span{display:block;color:var(--muted);font-weight:400;font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.finding h3{font-size:24px;font-weight:850;font-stretch:72%;text-transform:uppercase;margin-bottom:8px}
+.finding p{font-size:16px}
+.bars{display:grid;gap:10px;align-content:start}
+.bar{display:grid;gap:4px}
+.bar .t{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.bar .t b{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.track{height:14px;background:var(--sunk);position:relative}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--muted)}
+.fill.exc{background:var(--exc)} .fill.ok{background:var(--tick)}
+pre{margin:12px 0 0;background:var(--sunk);border:1px solid var(--line);padding:12px 14px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.6}
+.wrong{border:1.5px dashed var(--exc);background:var(--surface);padding:16px 18px;margin-top:26px}
+.wrong b{font-family:var(--display);font-stretch:75%;text-transform:uppercase;font-size:18px;color:var(--exc)}
+
+/* model */
+.model{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.diagram{background:var(--surface);border:1.5px solid var(--ink);padding:10px}
+.diagram svg{display:block;width:100%;height:auto}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--surface)}
+.tablewrap{overflow-x:auto;border:1.5px solid var(--ink)}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--sunk);font-weight:500}
+td:first-child{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+
+/* plan */
+.plan{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1.5px solid var(--ink);background:var(--surface)}
+.phase{padding:18px;border-right:1px solid var(--line)}
+.phase:last-child{border-right:0}
+.phase .when{font-family:var(--mono);font-size:12px;color:var(--pencil);font-weight:700}
+.phase h3{font-size:22px;font-weight:850;font-stretch:72%;text-transform:uppercase;margin:4px 0 8px}
+.phase ul{margin:0;padding-left:18px;font-size:15px}
+.phase li{margin:6px 0}
+
+.run{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center;background:var(--ink);color:var(--paper);padding:22px 24px}
+.run h3{font-size:26px;font-weight:850;font-stretch:72%;text-transform:uppercase}
+.run p{color:color-mix(in srgb,var(--paper) 75%,transparent);margin:6px 0 0;font-size:15px}
+.run pre{background:transparent;border:1px solid color-mix(in srgb,var(--paper) 30%,transparent);color:var(--paper);margin:0}
+.run a{color:var(--paper);font-family:var(--mono);font-size:14px;border:1.5px solid var(--paper);padding:10px 14px;text-decoration:none;white-space:nowrap}
+.src{font-size:13.5px;color:var(--muted)}
+.src li{margin:3px 0}
+footer{margin-top:40px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+@media (max-width:860px){
+  .hero,.two,.model{grid-template-columns:1fr}
+  .stamp{justify-self:start}
+  .facts,.motions,.plan{grid-template-columns:1fr 1fr}
+  .motion:nth-child(2),.fact:nth-child(2){border-right:0}
+  .motion,.fact{border-bottom:1px solid var(--line)}
+  .plan{grid-template-columns:1fr}.phase{border-right:0;border-bottom:1px solid var(--line)}
+  .finding{grid-template-columns:1fr;gap:12px}
+  .run{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .wp{grid-template-columns:1fr 1fr}.wp div:nth-child(2){border-right:0}.wp div{border-bottom:1px solid var(--line)}
+  .facts,.motions{grid-template-columns:1fr}.motion,.fact{border-right:0}
+  .row{grid-template-columns:minmax(0,1fr) 84px 60px}.row .cell.alt{display:none}
+  .row.head .cell.alt{display:none}
+}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .5s ease}.cell{transition:opacity .2s}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="wp" aria-label="Workpaper header">
+    <div><span>Client</span>Basis (getbasis.ai)</div>
+    <div><span>Engagement</span>GTM data and systems</div>
+    <div><span>Prepared by</span>S. A. Basharat Ali</div>
+    <div><span>Date</span>October 2026</div>
+  </div>
+
+  <header class="hero">
+    <div>
+      <h1>Basis sells practice by practice. Its GTM data should be modeled <em>the same way.</em></h1>
+      <p class="lede">A read of how Basis goes to market, six data problems that motion creates, and a working model that measures each one on a synthetic world shaped like Basis's GTM.</p>
+      <div class="by"><span>sabasharat.ali@gmail.com</span><span><a href="https://basharat.net">basharat.net</a></span><span><a href="https://github.com/sa-basharat-ali/accounting-gtm-data-model">code on GitHub</a></span></div>
+    </div>
+    <div class="stamp">
+      <span>Exception noted · A-1</span>
+      <b>+44%</b>
+      <p>New-logo ARR when the CRM's Type field decides, against the same deals measured on resolved firms.</p>
+    </div>
+  </header>
+
+  <section aria-labelledby="sum">
+    <div class="sec-h"><span class="ref">Summary</span><h2 id="sum">Same deals, two answers</h2></div>
+    <div class="ledger">
+      <div class="ledger-top">
+        <h3>Headline GTM metrics</h3>
+        <div class="seg" role="group" aria-label="Choose view">
+          <button type="button" id="vCrm" aria-pressed="false">What the CRM says</button>
+          <button type="button" id="vRule" aria-pressed="true">Declared rules</button>
+        </div>
+      </div>
+      <div class="rows" id="rows">
+        <div class="row head"><div>Metric</div><div class="cell alt">CRM view</div><div class="cell">Declared</div><div class="delta">Gap</div></div>
+      </div>
+      <div class="ledger-foot">Synthetic world: 230 firms, 252 Salesforce accounts, 139 opportunities, 2,647 Outreach events, 104 Gong calls, 30 partner registrations, 160 waitlist forms. No real Basis data.</div>
+    </div>
+  </section>
+
+  <section aria-labelledby="biz">
+    <div class="sec-h"><span class="ref">B-1</span><h2 id="biz">The business</h2></div>
+    <div class="facts">
+      <div class="fact"><b>$100M</b><span>Series B at $1.15B, led by Accel, Feb 2026</span></div>
+      <div class="fact"><b>~30%</b><span>of the top 25 accounting firms are customers</span></div>
+      <div class="fact"><b>~20%</b><span>of the top 150 firms use Basis day to day</span></div>
+      <div class="fact"><b>28</b><span>open GTM and customer-facing roles right now</span></div>
+    </div>
+    <div class="two">
+      <div>
+        <p>Basis deploys agents that run long, end-to-end accounting work across <strong>CAS and advisory, tax, audit and corporate close</strong>, plus an offer for small firms, and it has just launched an end-to-end tax platform.</p>
+        <p>The buyer is rarely "the firm". Each practice has its own lead partner, workflow and budget. One firm is several buying groups, and growth is expansion from one practice to the next. A CRM built around accounts hides exactly that.</p>
+      </div>
+      <div style="display:grid;gap:16px">
+        <div class="quote"><p>K-1-heavy returns went from 100+ prep hours to about 15–20.</p><cite>Tax partner, Boulay (paraphrased from basis.ai)</cite></div>
+        <div class="quote"><p>Basis is credited for 50% year-over-year growth in the CAS practice.</p><cite>CAS lead partner, Clark Nuber (paraphrased)</cite></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="mot">
+    <div class="sec-h"><span class="ref">B-2</span><h2 id="mot">Four motions, running at once</h2></div>
+    <div class="motions">
+      <div class="motion"><span class="n">M1</span><h3>Enterprise direct</h3><p>Top-25 and top-150 firms. Long cycles, pilots, security reviews.</p><span class="sig">Enterprise AE · Strategic Account Partner</span></div>
+      <div class="motion"><span class="n">M2</span><h3>Mid-market outbound</h3><p>New: moving from reactive demand fulfillment to a proactive outbound engine.</p><span class="sig">Sales Manager · BDR · GTM Engineer</span></div>
+      <div class="motion"><span class="n">M3</span><h3>Channel partners</h3><p>Advisory firms such as Sikich bring Basis into their client work. Partner credit is real money.</p><span class="sig">Channel Sales Leader · Partner Manager</span></div>
+      <div class="motion"><span class="n">M4</span><h3>Inbound waitlist</h3><p>The site form asks firm size, use case, ERP and a self-reported "how did you hear about us".</p><span class="sig">Demand Gen · Growth · Field Marketing</span></div>
+    </div>
+    <p style="margin-top:18px">Add Salesforce, Outreach, Gong, Clay, a partner portal and agents that now read and write the same records, and every tool thinks it is the source of truth. That is the job in the GTM Data and Systems Lead posting: define the model, make metrics consistent, keep syncs honest, give agents context they can trust.</p>
+  </section>
+
+  <section aria-labelledby="find">
+    <div class="sec-h"><span class="ref">A-1 to A-6</span><h2 id="find">Six problems, measured</h2></div>
+    <div class="legend"><span><span class="tk ok">✓</span> agreed to source</span><span><span class="tk x">⊗</span> exception noted</span><span>bars are drawn to scale within each finding</span></div>
+
+    <article class="finding">
+      <div class="wpref">A-1 <span class="tk x">⊗</span><span>New vs expansion</span></div>
+      <div><h3>The Type field turns expansions into new logos</h3><p>Expansions land on duplicate accounts or get typed as new business. Fixing the field alone still leaves +30%. Only resolving the firm first gets it right, and the same fix moves customers from 24 to 20 and customers live in two or more practices from 6 to 9.</p></div>
+      <div class="bars" data-max="4.42">
+        <div class="bar"><div class="t"><span>CRM Type field</span><b>$4.42M</b></div><div class="track"><div class="fill exc" data-v="4.42"></div></div></div>
+        <div class="bar"><div class="t"><span>History per SF account</span><b>$4.00M</b></div><div class="track"><div class="fill exc" data-v="4.00"></div></div></div>
+        <div class="bar"><div class="t"><span>History per resolved firm</span><b>$3.06M</b></div><div class="track"><div class="fill ok" data-v="3.06"></div></div></div>
+      </div>
+    </article>
+
+    <article class="finding">
+      <div class="wpref">A-2 <span class="tk x">⊗</span><span>Identity</span></div>
+      <div><h3>"Who is the customer" has no automatic answer</h3><p>Domain matching catches 15 of 22 duplicate accounts with no false merges. Name matching catches all 22 but merges 3 different companies that share a name. The design that works is tiered: auto-merge on domain, send the 10 name-only matches to a person (7 real, 3 not).</p></div>
+      <div class="bars" data-max="22">
+        <div class="bar"><div class="t"><span>Domain: caught</span><b>15 / 22</b></div><div class="track"><div class="fill ok" data-v="15"></div></div></div>
+        <div class="bar"><div class="t"><span>Name: caught</span><b>22 / 22</b></div><div class="track"><div class="fill ok" data-v="22"></div></div></div>
+        <div class="bar"><div class="t"><span>Name: wrong merges</span><b>3</b></div><div class="track"><div class="fill exc" data-v="3"></div></div></div>
+      </div>
+    </article>
+
+    <article class="finding">
+      <div class="wpref">A-3 <span class="tk x">⊗</span><span>Attribution</span></div>
+      <div><h3>Partner and AE both claim the deal</h3><p>13 partner-registered deals were also marked AE-sourced. One written rule, a registration dated before the opportunity was created wins, gives every deal exactly one motion and flags all 13 with no false flags.</p></div>
+      <div class="bars" data-max="5.82">
+        <div class="bar"><div class="t"><span>CRM + partner report summed</span><b>$5.82M</b></div><div class="track"><div class="fill exc" data-v="5.82"></div></div></div>
+        <div class="bar"><div class="t"><span>Actual pipeline + bookings</span><b>$5.07M</b></div><div class="track"><div class="fill ok" data-v="5.07"></div></div></div>
+      </div>
+    </article>
+
+    <article class="finding">
+      <div class="wpref">A-4 <span class="tk x">⊗</span><span>Activity</span></div>
+      <div><h3>Retries hide from the usual dedup</h3><p>150 webhook retries reused their event ID; 67 regenerated it. Dedup on event_id misses every regenerated one; dedup on message_id catches both. Then the definition: sends are attempts, not engagement.</p></div>
+      <div class="bars" data-max="214">
+        <div class="bar"><div class="t"><span>"Engaged" firms, any touch</span><b>214</b></div><div class="track"><div class="fill exc" data-v="214"></div></div></div>
+        <div class="bar"><div class="t"><span>Engaged: reply or held call</span><b>95</b></div><div class="track"><div class="fill ok" data-v="95"></div></div></div>
+      </div>
+    </article>
+
+    <article class="finding">
+      <div class="wpref">A-5 <span class="tk x">⊗</span><span>Sync drift</span></div>
+      <div><h3>A stalled sync makes healthy customers look dark</h3><p>For 10 accounts, the Salesforce last-activity sync stopped weeks ago while calls kept happening in Gong. A drift check comparing the field to its sources flags all 10 with no false flags.</p></div>
+      <div class="bars" data-max="5">
+        <div class="bar"><div class="t"><span>Dark customers, SF field</span><b>5</b></div><div class="track"><div class="fill exc" data-v="5"></div></div></div>
+        <div class="bar"><div class="t"><span>Dark customers, across tools</span><b>2</b></div><div class="track"><div class="fill ok" data-v="2"></div></div></div>
+      </div>
+    </article>
+
+    <article class="finding">
+      <div class="wpref">A-6 <span class="tk ok">✓</span><span>Agents</span></div>
+      <div><h3>Agents get context, not the keys</h3><p>The ontology records each entity's grain, which system owns each field, the metric rules in plain language, and what each agent may do. Reads carry lineage; governed changes go to a person with evidence attached.</p></div>
+      <div><pre>sdr_agent     task.create          applied
+revops_agent  firm.merge           escalated
+sdr_agent     last_engaged.update  blocked
+              (owned by warehouse)</pre></div>
+    </article>
+
+    <div class="wrong"><b>The part I got wrong</b><p style="margin:6px 0 0">The first version caught every failure with zero false merges, because every duplicate shared a domain. That was the generator agreeing with the detector, not a result. Adding duplicates under a legacy domain from an acquired firm produced the 15/22 and the false merges above, and the tiered design came out of that.</p></div>
+  </section>
+
+  <section aria-labelledby="mdl">
+    <div class="sec-h"><span class="ref">C-1</span><h2 id="mdl">The model, at the grain Basis sells</h2></div>
+    <div class="model">
+      <div class="diagram" role="img" aria-label="Entity diagram: firm has many buying groups and people; buying group has many opportunities; person has many activities; each opportunity has one motion">
+        <svg viewBox="0 0 440 330" xmlns="http://www.w3.org/2000/svg" font-family="JetBrains Mono, monospace" font-size="12">
+          <g fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--ink)">
+            <line x1="220" y1="62" x2="110" y2="128"/><line x1="220" y1="62" x2="330" y2="128"/>
+            <line x1="110" y1="168" x2="110" y2="232"/><line x1="330" y1="168" x2="330" y2="232"/>
+            <line x1="160" y1="252" x2="280" y2="252" stroke-dasharray="4 4"/>
+          </g>
+          <g style="color:var(--ink)">
+            <rect x="150" y="22" width="140" height="40" fill="var(--surface)" stroke="currentColor" stroke-width="1.5"/>
+            <text x="220" y="47" text-anchor="middle" fill="currentColor" font-weight="700">firm</text>
+            <rect x="40" y="128" width="140" height="40" fill="var(--tick-soft)" stroke="currentColor" stroke-width="1.5"/>
+            <text x="110" y="146" text-anchor="middle" fill="currentColor" font-weight="700">buying_group</text>
+            <text x="110" y="160" text-anchor="middle" fill="currentColor" font-size="10">firm × practice</text>
+            <rect x="260" y="128" width="140" height="40" fill="var(--surface)" stroke="currentColor" stroke-width="1.5"/>
+            <text x="330" y="153" text-anchor="middle" fill="currentColor" font-weight="700">person</text>
+            <rect x="40" y="232" width="140" height="40" fill="var(--surface)" stroke="currentColor" stroke-width="1.5"/>
+            <text x="110" y="250" text-anchor="middle" fill="currentColor" font-weight="700">opportunity</text>
+            <text x="110" y="264" text-anchor="middle" fill="currentColor" font-size="10">one motion, expansion flag</text>
+            <rect x="260" y="232" width="140" height="40" fill="var(--surface)" stroke="currentColor" stroke-width="1.5"/>
+            <text x="330" y="250" text-anchor="middle" fill="currentColor" font-weight="700">activity</text>
+            <text x="330" y="264" text-anchor="middle" fill="currentColor" font-size="10">attempted | engaged</text>
+            <text x="150" y="98" fill="currentColor" font-size="10">1 : many</text>
+            <text x="262" y="98" fill="currentColor" font-size="10">1 : many</text>
+            <text x="116" y="204" fill="currentColor" font-size="10">1 : many</text>
+            <text x="336" y="204" fill="currentColor" font-size="10">1 : many</text>
+            <text x="220" y="300" text-anchor="middle" fill="currentColor" font-size="10">activities roll up to buying groups through the person's practice</text>
+          </g>
+        </svg>
+      </div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Field</th><th>Owned by</th></tr></thead>
+        <tbody>
+          <tr><td>opportunity.stage</td><td>Salesforce</td></tr>
+          <tr><td>opportunity.amount</td><td>Salesforce</td></tr>
+          <tr><td>opportunity.motion</td><td>warehouse, declared rule</td></tr>
+          <tr><td>opportunity.is_expansion</td><td>warehouse, declared rule</td></tr>
+          <tr><td>firm.firm_id</td><td>warehouse, identity resolution</td></tr>
+          <tr><td>firm.last_engaged_at</td><td>warehouse, max of Gong and Outreach replies</td></tr>
+          <tr><td>partner.registration</td><td>partner portal</td></tr>
+          <tr><td>activity.*</td><td>Outreach, Gong (append-only)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="pl">
+    <div class="sec-h"><span class="ref">D-1</span><h2 id="pl">First 90 days in the role</h2></div>
+    <div class="plan">
+      <div class="phase"><div class="when">DAYS 1–30</div><h3>Find out what is true</h3><ul><li>Map which system controls each field across Salesforce, Outreach, Gong and Clay.</li><li>Resolve accounts into firms and buying groups; size the duplicate queue.</li><li>Agree the expansion rule and the partner-credit rule with RevOps and Finance.</li></ul></div>
+      <div class="phase"><div class="when">DAYS 31–60</div><h3>Make the numbers agree</h3><ul><li>Ship the semantic layer for pipeline, new vs expansion ARR, conversion and customer health.</li><li>Reconcile reporting to source records so teams stop rebuilding numbers in spreadsheets.</li><li>Add drift and sync monitoring with alerts.</li></ul></div>
+      <div class="phase"><div class="when">DAYS 61–90</div><h3>Give agents safe context</h3><ul><li>Publish the GTM ontology behind permission-aware interfaces.</li><li>Let agents propose merges and fixes; people approve governed changes.</li><li>Report practice penetration by firm so expansion is visible.</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="run">
+      <div>
+        <h3>Run it yourself</h3>
+        <p>Python standard library only, under a second. Three files: the synthetic world, the model, the report.</p>
+        <pre>git clone https://github.com/sa-basharat-ali/accounting-gtm-data-model
+cd accounting-gtm-data-model && python3 run.py</pre>
+      </div>
+      <a href="https://github.com/sa-basharat-ali/accounting-gtm-data-model">View the code →</a>
+    </div>
+  </section>
+
+  <section aria-labelledby="srcs">
+    <div class="sec-h"><span class="ref">Sources</span><h2 id="srcs">Where the GTM read comes from</h2></div>
+    <ul class="src">
+      <li>Basis website: solutions pages, waitlist form, customer stories (getbasis.ai)</li>
+      <li>Basis careers page and job board, including the GTM Data and Systems Lead, Sales Manager and channel roles</li>
+      <li>CPA Practice Advisor and SiliconANGLE, Feb 2026: Series B and customer share of top firms</li>
+      <li>Reported Sikich partnership for client accounting services</li>
+    </ul>
+    <footer>Independent work by Syed Ahmed Basharat Ali. Not affiliated with Basis. All modeled data is synthetic.</footer>
+  </section>
+</div>
+
+<script>
+(function(){
+  var M=[
+    {k:"New-logo ARR",s:"closed won, first purchase by the firm",crm:"$4.42M",rule:"$3.06M",d:"+44%"},
+    {k:"Customers",s:"accounts vs resolved firms",crm:"24",rule:"20",d:"+20%"},
+    {k:"Customers in 2+ practices",s:"the expansion story",crm:"6",rule:"9",d:"−33%"},
+    {k:"Pipeline + bookings",s:"CRM and partner report summed vs one motion per deal",crm:"$5.82M",rule:"$5.07M",d:"+15%"},
+    {k:"Engaged firms, 90 days",s:"any touch vs reply or held call",crm:"214",rule:"95",d:"+125%"},
+    {k:"Dark customers",s:"SF last activity vs all tools",crm:"5",rule:"2",d:"+150%"}
+  ];
+  var rows=document.getElementById("rows"), view="rule";
+  function render(){
+    rows.querySelectorAll(".row:not(.head)").forEach(function(r){r.remove();});
+    M.forEach(function(m){
+      var r=document.createElement("div"); r.className="row";
+      r.innerHTML='<div class="lab">'+m.k+'<small>'+m.s+'</small></div>'+
+        '<div class="cell alt '+(view==="crm"?"on":"off")+'">'+m.crm+'</div>'+
+        '<div class="cell '+(view==="rule"?"on":"off")+'">'+m.rule+'</div>'+
+        '<div class="delta exc">'+m.d+'</div>';
+      rows.appendChild(r);
+    });
+    document.getElementById("vCrm").setAttribute("aria-pressed",String(view==="crm"));
+    document.getElementById("vRule").setAttribute("aria-pressed",String(view==="rule"));
+  }
+  document.getElementById("vCrm").addEventListener("click",function(){view="crm";render();});
+  document.getElementById("vRule").addEventListener("click",function(){view="rule";render();});
+  render();
+  document.querySelectorAll(".bars[data-max]").forEach(function(b){
+    var max=parseFloat(b.getAttribute("data-max"));
+    b.querySelectorAll(".fill").forEach(function(f){f.style.width=(parseFloat(f.getAttribute("data-v"))/max*100)+"%";});
+  });
+})();
+</script>
+</body>
+</html>
